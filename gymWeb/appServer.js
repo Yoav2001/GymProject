@@ -4,6 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bp = require('body-parser');
 
+
+
 const db = require('./queries');
 const path = require('path');
 
@@ -11,10 +13,63 @@ const path = require('path');
 const app = express();
 const port = 5000;
 const filePath = path.join(__dirname);
-app.use(bp.json());
-app.use(bp.urlencoded({ extended: true }));
+
+
+
+
+
+
+
+app.get('/', (request, response) => {
+    response.json({ info: 'Node.js, Express, and Postgres API' })
+})
+//HOME PAGE
+app.get('/homepage', (req, res)=> {
+  res.sendFile(filePath+"/htmlFiles/homePage.html");
+});
+//LOG in
+app.get('/login', (req, res)=> {
+  res.sendFile(filePath+"/htmlFiles/login.html");
+});
+
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
+
+//Sign Up
+app.get('/signUp', (req, res) =>{
+  res.sendFile(filePath+"/htmlFiles/signUp.html");
+  
+});
+
+app.post('/signUp', db.createUser)
+
+
+app.get('/wallposts', (req, res)=> {
+  res.sendFile(filePath+"/htmlFiles/wallPostDemo.html");
+});
+
+app.listen(port, () => {
+  console.log(`App running on port ${port}.`)
+})
 
 /*
+app.get('/users', db.getUsers)
+app.get('/users/:id', db.getUserById)
+app.post('/users', db.createUser)
+app.put('/users/:id', db.updateUser)
+app.delete('/users/:id', db.deleteUser)
+
+app.listen(port, () => {
+    console.log(`App running on port ${port}.`)
+})
+*/
+
+/*
+
+
 
 var jsonparse = bodyParser.json();
 
@@ -26,27 +81,6 @@ app.use(
         extended: true,
     })
 )
-
-document.getElementById("email").v
-
-*/
-
-app.get('/', (request, response) => {
-    response.json({ info: 'Node.js, Express, and Postgres API' })
-})
-
-
-app.get('/users', db.getUsers)
-app.get('/users/:id', db.getUserById)
-app.post('/users', db.createUser)
-app.put('/users/:id', db.updateUser)
-app.delete('/users/:id', db.deleteUser)
-
-app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
-})
-
-/*
 
 console.log(__dirname);
 console.log(filePath);

@@ -24,7 +24,7 @@ const pool = new Pool({
 })
 
 
-const tableName="t_users";
+const tableName="t_user";
 
 
 
@@ -33,9 +33,9 @@ const tableName="t_users";
 
 
 
-//GET all t_users
+//GET all t_user
 const getUsers  = (request, response) => {
-    pool.query('SELECT * FROM t_users', (error, results) => {
+    pool.query('SELECT * FROM t_user', (error, results) => {
       if (error) {
         throw error
       }
@@ -54,7 +54,7 @@ const getUsers  = (request, response) => {
   const getUserById  = (request, response) => {
     const pass = parseInt(request.params.id)
   
-    pool.query('SELECT * FROM t_users WHERE pass = $1', [pass], (error, results) => {
+    pool.query('SELECT * FROM t_user WHERE pass = $1', [pass], (error, results) => {
       if (error) {
         throw error
       }
@@ -66,7 +66,7 @@ const getUsers  = (request, response) => {
   const allUsers  = (request, response) => {
     const query = `
     SELECT *
-    FROM t_users
+    FROM t_user
     `;
   
     client.query(query, (err, res) => {
@@ -88,7 +88,7 @@ const getUsers  = (request, response) => {
   const createUser = (request, response) => {
     const { name, email } = request.body
   
-    pool.query('INSERT INTO t_users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+    pool.query('INSERT INTO t_user (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
       if (error) {
         throw error
       }
@@ -100,7 +100,7 @@ const getUsers  = (request, response) => {
 
     
     const insertQuery = `
-    INSERT INTO t_users (name, email)
+    INSERT INTO t_user (name, email)
     VALUES ('nuni','nuni@gmail.com')
     `;
     client
@@ -119,7 +119,7 @@ const getUsers  = (request, response) => {
   const createUser = (request, response) => {
     const { name, email } = request.body
   
-    pool.query('INSERT INTO t_users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+    pool.query('INSERT INTO t_user (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
       if (error) {
         throw error
       }
@@ -131,10 +131,10 @@ const getUsers  = (request, response) => {
   //PUT updated data in an existing user
   const updateUser = (request, response) => {
     const id = parseInt(request.params.id)
-    const { name, email } = request.body
+    const { InputEmail, email } = request.body
   
     pool.query(
-      'UPDATE t_users SET name = $1, email = $2 WHERE id = $3',
+      'UPDATE t_user SET name = $1, email = $2 WHERE id = $3',
       [name, email, id],
       (error, results) => {
         if (error) {
@@ -150,7 +150,7 @@ const getUsers  = (request, response) => {
   const deleteUser = (request, response) => {
     const id = parseInt(request.params.id)
   
-    pool.query('DELETE FROM t_users WHERE id = $1', [id], (error, results) => {
+    pool.query('DELETE FROM t_user WHERE id = $1', [id], (error, results) => {
       if (error) {
         throw error
       }
