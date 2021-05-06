@@ -22,8 +22,12 @@ const pool = new Pool({
   password: 'y2o0a0v1',
   port: 5432,
 })
+const bodyParser = require("body-parser");
 
+const express = require('express');
+const path = require('path');
 
+const filePath = path.join(__dirname);
 const tableName="t_user";
 
 
@@ -52,13 +56,20 @@ const getUsers  = (request, response) => {
   //GET a single user by ID
 
   const getUserById  = (request, response) => {
-    const pass = parseInt(request.params.id)
-  
-    pool.query('SELECT * FROM t_user WHERE pass = $1', [pass], (error, results) => {
+    var subEmail = request.body.emailLogin;
+    var subpass = request.body.passwordLogins;  
+    pool.query('SELECT * FROM t_user WHERE email = $1 AND pass ', [subEmail,subpass], (error, results) => {
+      if(result.rows>0){
+        response.status(201).send("Hello " + subEmail);
+
+      }
+
       if (error) {
+        res.sendFile(filePath+"/htmlFiles/signUp.html");
+
         throw error
       }
-      response.status(200).json(results.rows)
+     
     })
   }
   ;
@@ -85,16 +96,25 @@ const getUsers  = (request, response) => {
 
 
   //POST a new user
-  const createUser = (request, response) => {
-    const { name, email } = request.body
   
-    pool.query('INSERT INTO t_user (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+  const createUser = (request, response) => {
+    var subEmail = request.body.InputEmail;
+    var subpass = request.body.InputPassword;
+    var subfname = request.body.InputFirstName;
+    var sublname = request.body.InputLastName;
+    var kindUserImage='default';
+    console.log(sublname,subpass);
+  
+    pool.query('INSERT INTO t_user (email,pass,first_name,last_name,image_name) VALUES ($1, $2,$3,$4,$5)', [subEmail,subpass,subfname,sublname,kindUserImage], (error, results) => {
       if (error) {
         throw error
       }
-      response.status(201).send(`User added with ID: ${result.insertId}`)
+    
+
+      response.status(201).send("Hello " + subfname +" " +sublname + ", Thank you for subcribing. You email is " + subEmail +"with pass"+subpass)
     })
   }
+  
   /*
   const createUser =(res) => {
 

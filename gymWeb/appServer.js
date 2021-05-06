@@ -1,9 +1,7 @@
 //require
 
 const express = require('express');
-const bodyParser = require('body-parser');
-const bp = require('body-parser');
-
+const bodyParser = require("body-parser");
 
 
 const db = require('./queries');
@@ -14,16 +12,12 @@ const app = express();
 const port = 5000;
 const filePath = path.join(__dirname);
 
+app.use(bodyParser.urlencoded({ extended: true }))
 
 
 
 
 
-
-app.get('/', (request, response) => {
-    response.json({ info: 'Node.js, Express, and Postgres API' })
-})
-//HOME PAGE
 app.get('/homepage', (req, res)=> {
   res.sendFile(filePath+"/htmlFiles/homePage.html");
 });
@@ -32,22 +26,54 @@ app.get('/login', (req, res)=> {
   res.sendFile(filePath+"/htmlFiles/login.html");
 });
 
+app.post('/login', db.getUserById)
+
+
+
+/*
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
 }))
 
+*/
+
 //Sign Up
+
+
 app.get('/signUp', (req, res) =>{
   res.sendFile(filePath+"/htmlFiles/signUp.html");
   
 });
+app.post('/signUp', db.createUser);
+/*
+app.post("/signUp", (req, res) => {
+ 
+  var subEmail = req.body.InputEmail;
+  var subpass = req.body.InputPassword;
+  var subfname = req.body.InputFirstName;
+  var sublname = req.body.InputLastName;
+  var kindUserImage='default';
 
-app.post('/signUp', db.createUser)
+
+  pool.query('INSERT INTO t_user (email,pass,first_name,last_name,image_name) VALUES ($1, $2,$3,$4,$5)', [subEmail,subpass,subfname,sublname,kindUserImage], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).send(`User added with ID: ${result.insertId}`)
+  })
+
+
+ res.send("Hello " + subfname +" " +sublname + ", Thank you for subcribing. You email is " + subEmail +"with pass"+subpass) ;
+
+});
+*/
+
 
 
 app.get('/wallposts', (req, res)=> {
+  
   res.sendFile(filePath+"/htmlFiles/wallPostDemo.html");
 });
 
