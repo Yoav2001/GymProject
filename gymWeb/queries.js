@@ -13,7 +13,7 @@ const client = new Client({
 
 client.connect();
 
-*/
+
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
@@ -22,11 +22,29 @@ const pool = new Pool({
   password: 'y2o0a0v1',
   port: 5432,
 })
-const bodyParser = require("body-parser");
+*/
+//require pg
+const pg = require('pg')
 
+// create a config to configure both pooling behavior
+// and client options
+// note: all config is optional and the environment variables
+// will be read if the config is not present
+var config = {
+  user: 'postgres', // env var: PGUSER
+  database: 'postgres', // env var: PGDATABASE
+  password: 'y2o0a0v1', // env var: PGPASSWORD
+  host: 'localhost', // Server hosting the postgres database
+  port: 5432, // env var: PGPORT
+  max: 10, // max number of clients in the pool
+  idleTimeoutMillis: 30000 // how long a client is allowed to remain idle before being closed
+}
+
+const pool = new pg.Pool(config)
+
+const bodyParser = require("body-parser");
 const express = require('express');
 const path = require('path');
-
 const filePath = path.join(__dirname);
 const tableName="t_user";
 
@@ -34,13 +52,41 @@ const tableName="t_user";
 
   //quires 
 
+  //run a querie
+    async function query (q) {
+      const client = await pool.connect()
+      let res
+      try {
+        await client.query('BEGIN')
+        try {
+          res = await client.query(q)
+          await client.query('COMMIT')
+        } catch (err) {
+          await client.query('ROLLBACK')
+          throw err
+        }
+      } finally {
+        client.release()
+      }
+      return res
+    }
+  
 
-
-
+  
+  //example of use query function
+  async function main () {
+    try {
+      const { rows } = await query('SELECT * FROM users')
+      console.log(JSON.stringify(rows))
+    } catch (err) {
+      console.log('Database ' + err)
+    }
+  }
+main();
 //GET all t_user
 const getUsers  = (request, response) => {
-    pool.query('SELECT * FROM t_user', (error, results) => {
-      if (error) {
+   pool.query('SELECT * FROM t_user', (error, results) => {
+      if ( error) {
         throw error
       }
       response.status(200).json(results.rows)
@@ -48,31 +94,47 @@ const getUsers  = (request, response) => {
   }
 
 
+  let isExistsUser = async (email,password) => {
+    try {
+      const { rows } = await query('SELECT * FROM t_user WHERE email = $1 AND pass = $2 ', [email,password]);
+      return  rows;
+    
+    } catch (err) {
+      console.log('Database ' + err)
+    }
+  }
+    
+ 
 
 
-
+   
 
   
   //GET a single user by ID
 
-  const getUserById  = (request, response) => {
-    var subEmail = request.body.emailLogin;
-    var subpass = request.body.passwordLogins;  
-    pool.query('SELECT * FROM t_user WHERE email = $1 AND pass ', [subEmail,subpass], (error, results) => {
-      if(result.rows>0){
-        response.status(201).send("Hello " + subEmail);
+   const getUserById  = (request, response) => {
+    let subEmail = request.body.emailLogin;
+    let subpass = request.body.passwordLogin;  
+    let userDetails=isExistsUser(subEmail,subpass);
 
-      }
+    if(JSON.stringify(userDetails.rows>0)
+    
+    {
+      response.sendFile(filePath+"/htmlFiles/userProfile.html");
+    }
+    
+      else{
+        response.sendFile(filePath+"/htmlFiles/signUp.html");
 
-      if (error) {
-        res.sendFile(filePath+"/htmlFiles/signUp.html");
-
-        throw error
-      }
+        /*
+              if (error) {
+                throw error
+              }
+              */
      
-    })
+    }
   }
-  ;
+  
 //all useres in another way
   const allUsers  = (request, response) => {
     const query = `
@@ -103,7 +165,7 @@ const getUsers  = (request, response) => {
     var subfname = request.body.InputFirstName;
     var sublname = request.body.InputLastName;
     var kindUserImage='default';
-    console.log(sublname,subpass);
+
   
     pool.query('INSERT INTO t_user (email,pass,first_name,last_name,image_name) VALUES ($1, $2,$3,$4,$5)', [subEmail,subpass,subfname,sublname,kindUserImage], (error, results) => {
       if (error) {

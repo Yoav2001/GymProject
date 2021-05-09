@@ -10,7 +10,7 @@ const path = require('path');
 //using require
 const app = express();
 const port = 5000;
-const filePath = path.join(__dirname);
+const filePath = path.join(__dirname); 
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -78,7 +78,7 @@ app.get('/wallposts', (req, res)=> {
 });
 
 app.listen(port, () => {
-  console.log(`App running on port ${port}.`)
+  console.log(`App running on port dffdg ${port}.`)
 })
 
 /*
