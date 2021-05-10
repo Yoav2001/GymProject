@@ -48,8 +48,6 @@ const path = require('path');
 const filePath = path.join(__dirname);
 const tableName="t_user";
 
-
-
   //quires 
 
   //run a querie
@@ -70,19 +68,32 @@ const tableName="t_user";
       }
       return res
     }
+
+    let isExistsUser = async (email,password) => {
+      try {
+  
+        const { data } = await query('SELECT * FROM t_user WHERE email = $1 AND pass = $2 ',[JSON.stringify(email),JSON.stringify(password)]);
+      
+        return  data;
+      
+      } catch (err) {
+        console.log('Database ' + err)
+      }
+    }
   
 
   
   //example of use query function
   async function main () {
     try {
-      const { rows } = await query('SELECT * FROM users')
+      const { rows } = await query('SELECT * FROM t_user')
       console.log(JSON.stringify(rows))
     } catch (err) {
       console.log('Database ' + err)
     }
   }
-main();
+
+
 //GET all t_user
 const getUsers  = (request, response) => {
    pool.query('SELECT * FROM t_user', (error, results) => {
@@ -94,15 +105,7 @@ const getUsers  = (request, response) => {
   }
 
 
-  let isExistsUser = async (email,password) => {
-    try {
-      const { rows } = await query('SELECT * FROM t_user WHERE email = $1 AND pass = $2 ', [email,password]);
-      return  rows;
-    
-    } catch (err) {
-      console.log('Database ' + err)
-    }
-  }
+  
     
  
 
@@ -116,9 +119,11 @@ const getUsers  = (request, response) => {
     let subEmail = request.body.emailLogin;
     let subpass = request.body.passwordLogin;  
     let userDetails=isExistsUser(subEmail,subpass);
+    console.log(userDetails);
 
-    if(JSON.stringify(userDetails.rows>0)
-    
+    console.log(JSON.stringify(userDetails)=='{}')
+    console.log('checkkkkkkkkkkkkkkkkkkkkk')
+    if(JSON.stringify(userDetails).rows>0) 
     {
       response.sendFile(filePath+"/htmlFiles/userProfile.html");
     }
@@ -133,7 +138,9 @@ const getUsers  = (request, response) => {
               */
      
     }
-  }
+
+  
+   }
   
 //all useres in another way
   const allUsers  = (request, response) => {
