@@ -68,18 +68,40 @@ const tableName="t_user";
       }
       return res
     }
+    //GET a single user by ID
 
-    let isExistsUser = async (email,password) => {
+    const getUserById  = async (request, response) => {
+      let email = request.body.emailLogin;
+      let password = request.body.passwordLogin;  
       try {
-  
-        const { data } = await query('SELECT * FROM t_user WHERE email = $1 AND pass = $2 ',[JSON.stringify(email),JSON.stringify(password)]);
-      
-        return  data;
+        let sql="SELECT * FROM t_user WHERE email = '" + email + "' AND pass = '"+password +"'";
+        const { rows } = await query(sql);
+        const row = rows[0];
+        console.log(rows);
+        /*
+        let ema=row['email'];
+        
+        console.log(ema +"and length "+ema.length);
+        */
+        if(rows.length>0) 
+        {
+          response.sendFile(filePath+"/htmlFiles/userProfile.html");
+
+        }
+        else 
+        {
+          response.sendFile(filePath+"/htmlFiles/signUp.html");
+
+        }
+
       
       } catch (err) {
         console.log('Database ' + err)
       }
+
     }
+
+    
   
 
   
@@ -92,6 +114,7 @@ const tableName="t_user";
       console.log('Database ' + err)
     }
   }
+ 
 
 
 //GET all t_user
@@ -107,40 +130,39 @@ const getUsers  = (request, response) => {
 
   
     
- 
+  let isExistsUser = async (email,password) => {
+      try {
+        let sql="SELECT * FROM t_user WHERE email = '" + email + "' AND pass = '"+password +"'";
+        const { rows } = await query(sql);
+        console.log(rows==null);
+
+        return (rows==null);
+      
+      } catch (err) {
+        console.log('Database ' + err)
+      }
+      
+
+  }
+  
+  const clickUpdateProfile  = async (request, response) => {
+    
+    try {
+      response.sendFile(filePath+"/htmlFiles/updateProfile.html");
+
+
+    
+    } catch (err) {
+      console.log('Database ' + err)
+    }
+
+  }
+
 
 
    
 
   
-  //GET a single user by ID
-
-   const getUserById  = (request, response) => {
-    let subEmail = request.body.emailLogin;
-    let subpass = request.body.passwordLogin;  
-    let userDetails=isExistsUser(subEmail,subpass);
-    console.log(userDetails);
-
-    console.log(JSON.stringify(userDetails)=='{}')
-    console.log('checkkkkkkkkkkkkkkkkkkkkk')
-    if(JSON.stringify(userDetails).rows>0) 
-    {
-      response.sendFile(filePath+"/htmlFiles/userProfile.html");
-    }
-    
-      else{
-        response.sendFile(filePath+"/htmlFiles/signUp.html");
-
-        /*
-              if (error) {
-                throw error
-              }
-              */
-     
-    }
-
-  
-   }
   
 //all useres in another way
   const allUsers  = (request, response) => {
@@ -171,10 +193,18 @@ const getUsers  = (request, response) => {
     var subpass = request.body.InputPassword;
     var subfname = request.body.InputFirstName;
     var sublname = request.body.InputLastName;
-    var kindUserImage='default';
+    var defult_kindUserImage='default';
 
-  
-    pool.query('INSERT INTO t_user (email,pass,first_name,last_name,image_name) VALUES ($1, $2,$3,$4,$5)', [subEmail,subpass,subfname,sublname,kindUserImage], (error, results) => {
+    var cur_num = request.body.myCarousel;
+    console.log(cur_num);
+
+    
+    var centerSlide = document.createElement("img");
+    centerSlide.src = $('#myCarousel').slick('slickCurrentSlide');
+    document.getElementById("view-port").appendChild(centerSlide);
+    console.log(centerSlide);
+    
+    pool.query('INSERT INTO t_user (email,pass,first_name,last_name,image_name) VALUES ($1, $2,$3,$4,$5)', [subEmail,subpass,subfname,sublname,defult_kindUserImage], (error, results) => {
       if (error) {
         throw error
       }
@@ -246,6 +276,7 @@ const getUsers  = (request, response) => {
       response.status(200).send(`User deleted with ID: ${id}`)
     })
   }
+
   
   module.exports = {
     allUsers,
@@ -254,4 +285,5 @@ const getUsers  = (request, response) => {
     createUser,
     updateUser,
     deleteUser,
+    clickUpdateProfile
   }

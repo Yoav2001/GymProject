@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 const db = require('./queries');
 const path = require('path');
+const { openStdin } = require('process');
 
 //using require
 const app = express();
@@ -13,7 +14,14 @@ const port = 5000;
 const filePath = path.join(__dirname); 
 
 app.use(bodyParser.urlencoded({ extended: true }))
+// Static route for files in the current directory...
+// Note that this serves all files relative to the given
+// path, even ones you probably don't want.
+app.use(express.static(__dirname));
 
+// Note: you should really put these files in a subdirectory
+// And use static like this:
+app.use('/images', express.static(__dirname +'/images')); 
 
 
 
@@ -46,7 +54,36 @@ app.get('/signUp', (req, res) =>{
   res.sendFile(filePath+"/htmlFiles/signUp.html");
   
 });
+
 app.post('/signUp', db.createUser);
+
+//userProfile
+app.get('/userProfile', (req, res)=> {
+  res.sendFile(filePath+"/htmlFiles/userProfile.html");
+});
+app.post('/userProfile', db.clickUpdateProfile);
+/*
+app.post('/userProfile',()=> {
+  res.sendFile(filePath+"/htmlFiles/updateProfile.html");
+} );
+*/
+
+//updateProfile
+app.get('/updateprofile', (req, res)=> {
+  res.sendFile(filePath+"/htmlFiles/updateProfile.html");
+});
+/*
+app.post('/updateprofile', db.updateUser);
+*/
+
+app.get('/wallposts', (req, res)=> {
+   
+  res.sendFile(filePath+"/htmlFiles/wallPostDemo.html");
+});
+
+app.listen(port, () => {
+  console.log(`App running on port dffdg ${port}.`)
+})
 /*
 app.post("/signUp", (req, res) => {
  
@@ -71,15 +108,6 @@ app.post("/signUp", (req, res) => {
 */
 
 
-
-app.get('/wallposts', (req, res)=> {
-  
-  res.sendFile(filePath+"/htmlFiles/wallPostDemo.html");
-});
-
-app.listen(port, () => {
-  console.log(`App running on port dffdg ${port}.`)
-})
 
 /*
 app.get('/users', db.getUsers)

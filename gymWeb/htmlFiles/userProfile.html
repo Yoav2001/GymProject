@@ -10,7 +10,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/carousel.css">
+    <link rel="stylesheet" href="../css/userProfile.css" type="text/css">
 
+    <link href="userProfile.js"></link>
 
 </head>
 
@@ -23,91 +25,90 @@
                 <div class="navbar-header">
                     
                     
-
+                
                     <a class="navbar-brand" href="#">ProJym</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li><a href="homePage.html">home page</a></li>
-                    <li><a href="login.js">wall post</a></li>
-                    <li class="active"><a href="signUp.html">User Profile</a></li>
+                    <li><a href="http://localhost:5000/homepage">home page</a></li>
+                    <li><a href="http://localhost:5000/wallposts">wall post</a></li>
+                    <li class="active"><a href="http://localhost:5000/userProfile">User Profile</a></li>
                 </ul>
             </div>
         </nav>
     </div>
     <div class="jumbotron text-center">
         <h1>User Profile </h1>
-      </div>
+    </div>
 
-
-<style>
-
-
-
-body {
-    background-color: #B3E5FC;
-    border-radius: 10px
+<script>
+  
+  function userImage() {
+    var image = document.getElementsByClassName("imageUser");
+    image.src ="../gymWeb/images/usersImage/default.jpg"
 }
+
+</script>
+     <style>
+
+
 
 .card {
-    width: 400px;
-    border: none;
-    border-radius: 10px;
-    background-color: #fff
-}
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 300px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+      }
+      
+      .title {
+        color: grey;
+        font-size: 18px;
+      }
+      
+      button {
+        border: none;
+        outline: 0;
+        display: inline-block;
+        padding: 8px;
+        color: white;
+        background-color: #000;
+        text-align: center;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+      }
+      
+      a {
+        text-decoration: none;
+        font-size: 22px;
+        color: black;
+      }
+      
+      button:hover, a:hover {
+        opacity: 0.7;
+      }
 
-.stats {
-    background: #f2f5f8 !important;
-    color: #000 !important
-}
-
-.articles {
-    font-size: 10px;
-    color: #a1aab9
-}
-
-.number1 {
-    font-weight: 500
-}
-
-.followers {
-    font-size: 10px;
-    color: #a1aab9
-}
-
-.number2 {
-    font-weight: 500
-}
-
-.rating {
-    font-size: 10px;
-    color: #a1aab9
-}
-
-.number3 {
-    font-weight: 500
-}
-</style>
-
-
-      <div class="container mt-5 d-flex justify-content-center">
-        <div class="card p-3">
-            <div class="d-flex align-items-center">
-                <div class="image"> <img src="../images/usersImage/default.jpg" class="rounded" width="155"> </div>
-                <div class="ml-3 w-100">
-                    <h4 class="mb-0 mt-0">Alex Morrision</h4> <span>Senior Journalist</span>
-                    <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
-                        <div class="d-flex flex-column"> <span class="articles">weight</span> <span class="number1">38</span> </div>
-                        <div class="d-flex flex-column"> <span class="followers">height</span> <span class="number2">980</span> </div>
-                        <div class="d-flex flex-column"> <span class="rating">posts</span> <span class="number3">8.9</span> </div>
-                    </div>
-                    <!-- update btn-->
-                    <div class="button mt-2 d-flex flex-row align-items-center"> 
-                    <button class="btn btn-sm btn-primary w-100 ml-2">update</button> 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+     </style>
+  
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      
+     
+   
+      <form method="POST"  onload="userImage()">
+      <h2 style="text-align:center">User Profile Card</h2>
+      
+      <div class="card" >
+        <img id="imageUser"   src="../images/usersImage/firstMan.png"alt="John"  style="width:100%">
+        <h1>John Doe</h1>
+        <p class="title">CEO & Founder, Example</p>
+        <p>weight :84  height:1.61</p>
+      
+        <p><button type="submit"   class="button">update </button></p>
+      </div>
+      
+    </form>
+    
+      
 
 
 </body>
