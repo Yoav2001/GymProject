@@ -277,6 +277,41 @@ const getUsers  = (request, response) => {
     })
   }
 
+
+/*
+  const inserPost  = async (request, response) => {
+    let email = request.body.emailLogin;
+    let textPost =
+    let dfdf = new Date(Date.now);
+
+console.log(event.toString());
+    let timeSendPost =
+
+
+    try {
+      let sql="SELECT * FROM t_post WHERE email = '" + email + "' AND pass = '"+password +"'";
+      const { rows } = await query(sql);
+      const row = rows[0];
+      console.log(rows);
+    
+      if(rows.length>0) 
+      {
+        response.sendFile(filePath+"/htmlFiles/userProfile.html");
+
+      }
+      else 
+      {
+        response.sendFile(filePath+"/htmlFiles/signUp.html");
+
+      }
+
+    
+    } catch (err) {
+      console.log('Database ' + err)
+    }
+
+  }
+*/
   
   module.exports = {
     allUsers,
