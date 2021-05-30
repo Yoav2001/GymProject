@@ -23,6 +23,14 @@ const pool = new Pool({
   port: 5432,
 })
 */
+
+//require jwt
+
+const jwt = require('jsonwebtoken');
+
+
+
+
 //require pg
 const pg = require('pg')
 
@@ -278,22 +286,34 @@ const getUsers  = (request, response) => {
   }
 
 
+
+  const insertPost  = async (request, response) => {
+    /*
+    let email = request.body.emailPost;
+*/
 /*
-  const inserPost  = async (request, response) => {
-    let email = request.body.emailLogin;
-    let textPost =
-    let dfdf = new Date(Date.now);
+    let email = request.body.emailPost;
+    let text_post =request.body.textPost;
+    let image_post=request.body.imagePost;
+    let time_sendPost = new Date(Date.now);
 
-console.log(event.toString());
-    let timeSendPost =
+    const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
 
+console.log(today.toLocaleDateString() +" " +today.getHours()+":"+today.getMinutes())
+
+*/
 
     try {
-      let sql="SELECT * FROM t_post WHERE email = '" + email + "' AND pass = '"+password +"'";
-      const { rows } = await query(sql);
+      let sqlexample=`INSERT INTO t_post (email_post,text_post,time_post,imagepath) VALUES ('omerron@gmail.com','My firstpost in elkana Gym','Tue Aug 28 1975 23:15:30 GMT+0200 (CEST)','judo.jpg')`;
+
+   /*   let sql=`INSERT INTO t_user (email_post,text_post,time_post,image_path) VALUES (${email},${text_post},${time_sendPost},${image_post} )`;*/
+      const { rows } = await query(sqlexample);
       const row = rows[0];
       console.log(rows);
-    
+
+      console.log(`email ${email} your ${text_post} goes on`);
+    /*
       if(rows.length>0) 
       {
         response.sendFile(filePath+"/htmlFiles/userProfile.html");
@@ -304,15 +324,15 @@ console.log(event.toString());
         response.sendFile(filePath+"/htmlFiles/signUp.html");
 
       }
-
+  */
     
     } catch (err) {
       console.log('Database ' + err)
     }
 
   }
-*/
-  
+
+  insertPost();
   module.exports = {
     allUsers,
     getUsers ,
@@ -320,5 +340,6 @@ console.log(event.toString());
     createUser,
     updateUser,
     deleteUser,
-    clickUpdateProfile
+    clickUpdateProfile,
+    insertPost
   }

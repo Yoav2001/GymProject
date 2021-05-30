@@ -23,8 +23,11 @@ app.use(express.static(__dirname));
 // And use static like this:
 app.use('/images', express.static(__dirname +'/images')); 
 
-
-
+const cors = require("cors");
+var corsOptions = {
+  origin: "http://localhost:8081"
+};
+app.use(cors(corsOptions));
 
 app.get('/homepage', (req, res)=> {
   res.sendFile(filePath+"/htmlFiles/homePage.html");
@@ -76,14 +79,17 @@ app.get('/updateprofile', (req, res)=> {
 app.post('/updateprofile', db.updateUser);
 */
 
-app.get('/wallposts', (req, res)=> {
+app.get('/wallBlog', (req, res)=> {
    
-  res.sendFile(filePath+"/htmlFiles/wallPostDemo.html");
+  res.sendFile(filePath+"/htmlFiles/wallBlog.html");
 });
+app.post('/wallBlog', db.insertPost);
+
 
 app.listen(port, () => {
   console.log(`App running on port dffdg ${port}.`)
 })
+
 /*
 app.post("/signUp", (req, res) => {
  
